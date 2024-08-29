@@ -1,98 +1,151 @@
+##############################################
+#So..
+#For this example we have 13 hpeirwtika(RED songs)
+#We also have 8 psarantonis (BLUE songs)
+#5 of our songs are for testing 
+#Song 10 is rated as psarantonis but is in fact hpeirwtiko
+#The way to read the diagram as is:
+#First 13 songs are hpeirwtika, which means 0-12 are hpeirwtika
+#The rest are psarantonis
+#Song 10 belongs to hpeirwtika
+#But is rated as psarantonis because it is located on the blue area
+##############################################
 from sklearn.model_selection import train_test_split 
 from sklearn.neighbors import KNeighborsClassifier 
 import numpy as np 
 import pandas as pd 
 from sklearn.decomposition import PCA
 from sklearn.preprocessing import StandardScaler
+import matplotlib.pyplot as plt
+from sklearn import datasets, neighbors
+from mlxtend.plotting import plot_decision_regions
+from sklearn.metrics import accuracy_score, classification_report
+
 
 
 #Define a specific random state
 random_state = 11
+
 #Read our csv
 df = pd.read_csv("results_features.csv")
 
-#Get everything but "col" for the X dataset
-col = "singer"
-df1 = df.loc[:, df.columns != col]
+#X and y
+X = df.drop("singer", axis=1)
+y = df["singer"]
 
-X = df1
-y = df.singer
+#Apply PCA to my data
+pca = PCA(n_components=2)
+X_pca = pca.fit_transform(X)
+#Trick to get the names of where each song belongs to
+X_keep_track_of_the_songs = list(range(len(df)))
 
-X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=0.15, random_state=random_state)
-
-pca = PCA()
-#0.119587034,0.09071353,0.41663003,0.032647654,0.044402957,0.13244224,0.122882225,0.69242257,0.13523835,0.13890015,0.105617434,0.09375029,0.18401869,0.13884936,0.15602149,0.07109619,0.08304924,0.15424883,0.09972234,0.16795069,0.105002314,0.16069685,0.16368876,0.12732211,-269.68384,146.86436,-19.146767,8.894126,1.8628483,-0.093213625,-10.192841,-12.479555,-13.838629,-10.428223,-8.707618,-9.779715,-20.995169,37.281082,19.108267,13.358261,9.25996,9.369402,7.822067,8.591619,9.498482,7.9891863,9.122298,9.558624,9.741931,9.814951,1191.6809151835641,321.6857247058458,1.4260078383859922,28.191733898166067,26.956366573957744,30.741453651547268,28.4644308846394,29.388219307447038,25.092449033908753,52.898259586924716,4.842854108956008,4.504602954610657,4.4435363264755345,4.20628273146731,4.138266039196495,3.8051359545146717,3.4822001072582136,2049.9889739181067,742.0169370292667,2.0141336663278904,0.050201797515725774,0.01911214845424536,1.2659069682286914,135.69078947368422,hpeirwtika
-#
-#0.11288329,0.10904171,0.4613836,0.1228917,0.08814236,0.080338486,0.11895828,0.46851966,0.33412078,0.38424262,0.08468376,0.03694772,0.13969025,0.109804265,0.1851093,0.1690936,0.09955197,0.12215241,0.09385313,0.15359558,0.14458814,0.19238569,0.12872402,0.07443989,-172.81158,93.581245,-9.012476,33.489162,1.1758693,13.782958,0.22143573,4.85685,-2.9070141,-2.715047,-6.85443,0.5298891,-4.045144,90.734726,24.233807,11.720824,9.952213,9.873822,7.7722936,7.714536,6.9757457,8.765986,7.458847,6.7889824,6.7255626,7.211766,2014.9245892305685,606.317769672929,0.5240652645429066,31.903450967945027,21.78920720408332,23.93798451138494,24.571506666982895,24.69846295394526,23.3319330314897,55.0241146769799,5.464459908398677,5.12251625259335,5.080061440174739,4.214836877593631,3.7426686449431337,3.896478885553443,4.846532709325291,4340.096244142368,1253.8497211443096,-0.024032977469119084,0.06772007668383666,0.03953179183254443,1.6308580553261474,103.125,psarantonis
-data_dummy = [
-    0.119587034,0.09071353,0.41663003,0.032647654,0.044402957,0.13244224,0.122882225,0.69242257,0.13523835,0.13890015,0.105617434,0.09375029,0.18401869,0.13884936,0.15602149,0.07109619,0.08304924,0.15424883,0.09972234,0.16795069,0.105002314,0.16069685,0.16368876,0.12732211,-269.68384,146.86436,-19.146767,8.894126,1.8628483,-0.093213625,-10.192841,-12.479555,-13.838629,-10.428223,-8.707618,-9.779715,-20.995169,37.281082,19.108267,13.358261,9.25996,9.369402,7.822067,8.591619,9.498482,7.9891863,9.122298,9.558624,9.741931,9.814951,1191.6809151835641,321.6857247058458,1.4260078383859922,28.191733898166067,26.956366573957744,30.741453651547268,28.4644308846394,29.388219307447038,25.092449033908753,52.898259586924716,4.842854108956008,4.504602954610657,4.4435363264755345,4.20628273146731,4.138266039196495,3.8051359545146717,3.4822001072582136,2049.9889739181067,742.0169370292667,2.0141336663278904,0.050201797515725774,0.01911214845424536,1.2659069682286914,135.69078947368422
-]
-#data = [[value] for value in data_dummy]
-
-
-scaler = StandardScaler()
-scaler.fit(df1)
-print(X_train.shape)
-# Normalize training data
-X_train_scaled = scaler.transform(X_train)
-print(X_train_scaled.shape)
-       
-df_normalized=(df1 - df1.mean()) / df1.std()
-components = pca.fit_transform(df_normalized)
-
-#Labels
-
-# Create and train KNN model
-knn = KNeighborsClassifier(n_neighbors=3)
-knn.fit(X_train_scaled, y_train)
-
-# Predict new data
-new_data = np.array(data_dummy).reshape(1, -1)  # Your new data as a DataFrame
-
-
-
-
-# Normalize new data
-new_data_scaled = scaler.transform(new_data)
-print(new_data_scaled)
-
-#No clue
-#new_data_components = pca.transform(new_data_scaled)
-#print(new_data_components.shape)
-
-
-#new_data_components = pca.transform(new_data_normalized)
-
-
-#Labels
-
-predicted_singer = knn.predict(new_data_scaled)
-print("Predicted singer", predicted_singer)
-
+print("X_pca data:")
+print(X_pca[0][0])
 
 
 
 '''
-import pandas as pd
-from sklearn.decomposition import PCA
-from sklearn.neighbors import KNeighborsClassifier
-from sklearn.model_selection import train_test_split
+#Checking how many n_components are necessary
+explained_variance_ratio = pca.explained_variance_ratio_
 
-# Your existing code (assuming you have df, singercol, and components)
+plt.plot(np.cumsum(explained_variance_ratio))
+plt.xlabel('Number of components')
+plt.ylabel('Cumulative explained variance')
+plt.title('Explained variance plot')
+plt.show()
+'''
+print("X_pca: ")
+print(X_pca)
 
-# Prepare data for KNN
-y = singercol  # Target variable
-X_train, X_test, y_train, y_test = train_test_split(components, y, test_size=0.2, random_state=42)
+print("X_keep_track_of_the_songs: ")
+print(X_keep_track_of_the_songs)
 
-# Create and train KNN model
-knn = KNeighborsClassifier(n_neighbors=3)
+X_train, X_test, y_train, y_test = train_test_split(X_pca, y, test_size=0.2, random_state=random_state)
+
+for i in range(X_test.shape[0]):
+    for j in range(len(X_keep_track_of_the_songs)):
+        if(X_test[i][0] == X_pca[j][0] and X_test[i][1] == X_pca[j][1]):
+            X_keep_track_of_the_songs[i] = j
+
+for i in range(X_test.shape[0], X_train.shape[0] + X_test.shape[0],1):
+    X_keep_track_of_the_songs[i] = 0
+
+
+
+print("X_train: ")
+print(X_train)
+
+print("Number of Train songs: ")
+print(X_train.shape[0])
+print("X_keep_track_of_the_songs: ")
+print(X_keep_track_of_the_songs)
+#Building the KNN model
+
+#Create KNN model:
+knn = KNeighborsClassifier(n_neighbors=2) #Based on the amount of singers we could potentially change that number
+
+#Train the model
 knn.fit(X_train, y_train)
 
-# Predict new data
-new_data = ...  # Your new data as a DataFrame
-new_data_normalized = (new_data - df.mean()) / df.std()
-new_data_components = pca.transform(new_data_normalized)
-predicted_singer = knn.predict(new_data_components)
-print(predicted_singer)
+#Make predictions on the test set:
+y_pred = knn.predict(X_test)
 
-'''
+#Evaluating the models performance
+accuracy = accuracy_score(y_test, y_pred)
+print("Accuracy:", accuracy)
+
+report = classification_report(y_test, y_pred)
+print("Classification report:\n", report)
+
+from sklearn.metrics import confusion_matrix
+import seaborn as sns
+
+# Calculate the confusion matrix
+cm = confusion_matrix(y_test, y_pred)
+
+# Create a heatmap   
+
+sns.heatmap(cm, annot=True, cmap='Blues')
+plt.xlabel('Predicted')
+plt.ylabel('True')
+plt.title('Confusion Matrix')
+plt.show()
+
+
+
+# Get the nearest neighbors for each training point
+#neighbors = knn.kneighbors(X_train, return_distance=False)
+
+# Assign songs to groups based on nearest neighbors
+from sklearn.cluster import KMeans
+kmeans = KMeans(n_clusters=2, random_state=42)
+song_groups1 = kmeans.fit_predict(X_train)
+song_groups2 = kmeans.fit_predict(X_test)
+# Create a colormap to distinguish between groups
+cmap = 'RdYlBu'
+
+# Scatter plot with colors based on groups
+plt.scatter(X_train[:, 0], X_train[:, 1], c=song_groups1, cmap=cmap, alpha=0.7)
+plt.scatter(X_test[:, 0], X_test[:, 1], c=song_groups2, cmap=cmap, alpha=0.3)
+
+
+for i in range(len(X_test)):
+    row_index = df.index[i]  # Get the row index
+    column_name = df.columns[-1]  # Assuming you want the first column's name
+    plt.text(X_test[i, 0], X_test[i, 1], f"Song {X_keep_track_of_the_songs[i]} ", fontsize=8)
+    print("ahahahahah", X_test[i, 0])
+
+
+# Add labels and title
+plt.xlabel('Feature 1')
+plt.ylabel('Feature 2')
+plt.title('KNN Classification: Neighbor Groups')
+
+# Add colorbar to show group assignments
+plt.colorbar(cmap=cmap, label='Group')
+
+plt.show()
+
+
+#Reds are hpeirwtika
+#Psarantonis ta alla
