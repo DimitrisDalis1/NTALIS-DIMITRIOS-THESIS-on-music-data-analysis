@@ -56,7 +56,7 @@ X_keep_track_of_the_songs = list(range(len(df)))
 X_train, X_test, y_train, y_test = train_test_split(X_pca, y, test_size=0.2, random_state=random_state)
 
 ################
-#What I am trying to do below is match my data with which song they were in the beggining before fitting
+#What I am trying to do below is match my data with which song they were in the beginning before fitting
 for i in range(X_test.shape[0]):
     for j in range(len(X_keep_track_of_the_songs)):
         if(X_test[i][0] == X_pca[j][0] and X_test[i][1] == X_pca[j][1]):
