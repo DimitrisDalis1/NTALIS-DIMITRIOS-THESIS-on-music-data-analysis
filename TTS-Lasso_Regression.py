@@ -10,6 +10,7 @@
 #Song 10 belongs to hpeirwtika
 #But is rated as psarantonis because it is located on the blue area
 ##############################################
+
 from sklearn.model_selection import train_test_split 
 from sklearn.neighbors import KNeighborsClassifier 
 import numpy as np 
@@ -20,8 +21,6 @@ import matplotlib.pyplot as plt
 from sklearn import datasets, neighbors
 from mlxtend.plotting import plot_decision_regions
 from sklearn.metrics import accuracy_score, classification_report
-
-
 
 #Define a specific random state
 random_state = 11
@@ -36,11 +35,7 @@ y = df["singer"]
 #Apply PCA to my data
 pca = PCA(n_components=2)
 X_pca = pca.fit_transform(X)
-#Trick to get the names of where each song belongs to
-X_keep_track_of_the_songs = list(range(len(df)))
 
-print("X_pca data:")
-print(X_pca[0][0])
 
 
 
@@ -54,14 +49,14 @@ plt.ylabel('Cumulative explained variance')
 plt.title('Explained variance plot')
 plt.show()
 '''
-print("X_pca: ")
-print(X_pca)
 
-print("X_keep_track_of_the_songs: ")
-print(X_keep_track_of_the_songs)
+#Trick to get the names of where each song belongs to
+X_keep_track_of_the_songs = list(range(len(df)))
 
 X_train, X_test, y_train, y_test = train_test_split(X_pca, y, test_size=0.2, random_state=random_state)
 
+################
+#What I am trying to do below is match my data with which song they were in the beggining before fitting
 for i in range(X_test.shape[0]):
     for j in range(len(X_keep_track_of_the_songs)):
         if(X_test[i][0] == X_pca[j][0] and X_test[i][1] == X_pca[j][1]):
@@ -70,15 +65,8 @@ for i in range(X_test.shape[0]):
 for i in range(X_test.shape[0], X_train.shape[0] + X_test.shape[0],1):
     X_keep_track_of_the_songs[i] = 0
 
+#################
 
-
-print("X_train: ")
-print(X_train)
-
-print("Number of Train songs: ")
-print(X_train.shape[0])
-print("X_keep_track_of_the_songs: ")
-print(X_keep_track_of_the_songs)
 #Building the KNN model
 
 #Create KNN model:
@@ -112,9 +100,7 @@ plt.title('Confusion Matrix')
 plt.show()
 
 
-
 # Get the nearest neighbors for each training point
-#neighbors = knn.kneighbors(X_train, return_distance=False)
 
 # Assign songs to groups based on nearest neighbors
 from sklearn.cluster import KMeans
