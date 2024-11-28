@@ -80,7 +80,7 @@ def classify_and_plot(X, y):
         print('Accuracy = %5s' % round(accuracy(n_neighbors, X_train, y_train, X_test, y_test), 3))
         print('----------------------------------------------------------------------')
 
-# load your data 
+# load data 
 new_data  = pd.read_csv('results_features.csv')
 data = new_data[["chroma_mean_0", "chroma_std_0", "mfccs_mean_0", "mfccs_std_0", "cent_mean", "cent_std", "cent_skew", "contrast_mean_0", "contrast_std_0", "rolloff_mean", "rolloff_std", "rolloff_skew", "zrate_mean", "zrate_std", "zrate_skew", "tempo", "singer"]]
 
