@@ -29,7 +29,7 @@ print("Accuracy:", accuracy)
 #Visualizing Individual Decision Trees
 from sklearn.tree import plot_tree
 
-# Assuming you've trained your Random Forest model
+
 plt.figure(figsize=(20, 10))
 plot_tree(rf_classifier.estimators_[0], filled=True, rounded=True, 
           class_names=['Class 0', 'Class 1'], feature_names=X.columns)
