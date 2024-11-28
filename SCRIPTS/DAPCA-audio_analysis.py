@@ -99,7 +99,3 @@ for i in range(num_components):
         plt.title(f"PC{i+1} vs PC{j+1}")
         plt.colorbar()
         plt.show()
-
-import plotly.express as px
-
-# ... (rest of your code)
