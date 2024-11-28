@@ -30,7 +30,7 @@ def enumerate_strings(strings):
 
     return enumerated_strings
 
-# Load your data
+# Load data
 data = pd.read_csv('results_features.csv')
 
 numerical_data = data.iloc[:, :-1]
@@ -43,6 +43,7 @@ artist_category = np.array(artist_category)  # Assuming artist_category is a lis
 
 #Change this number to alter the amount of features and PCAs are shown/compared
 Pca_number = 3
+
 # Perform DAPCA
 V, D, PX, PY, kNNs = DAPCA(numerical_data, artist_category, nComp=Pca_number)
 '''
@@ -60,12 +61,10 @@ print(num_components_to_keep)
 V_reduced = V[:, :Pca_number]
 X_reduced = numerical_data[:, :Pca_number]
 
-# ... (rest of your code)
-
 # Get absolute loadings for selected components
 abs_loadings = np.abs(V_reduced)
 
-# Identify top features for each component (assuming 3 components)
+# Identify top features for each component (assuming 4 components)
 top_features_per_component = []
 for i in range(Pca_number):
     top_features_per_component.append(data.columns[:-1][abs_loadings[:, i].argsort()[-4:]])  # Get top 3 features
@@ -86,7 +85,6 @@ label_encoder = LabelEncoder()
 artist_category_encoded = label_encoder.fit_transform(artist_category)
 
 # Create a scatter plot
-# Assuming you have the X_reduced matrix with all principal components
 num_components = X_reduced.shape[1]
 
 
