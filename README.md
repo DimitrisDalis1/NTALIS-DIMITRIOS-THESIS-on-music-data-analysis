@@ -6,7 +6,7 @@ I have not uploaded the program that creates custom song names.
 By using audio_analysis.py you convert our mp3 songs into features which are later stored into our CSV
 Since the mp3s are not uploaded (at this branch at least) you cannot use audio_analyis.py but it is essentially our "Converter to usefull stuff" programm
 
-Things that I have done
+# Things that I have done #
 
 (DAPCA-audio_analysis.py)DAPCA which gives us some important features while also comparing different PCAs
 (get_wanted_artists)Creates a csv with only the two artists we want to choose from
