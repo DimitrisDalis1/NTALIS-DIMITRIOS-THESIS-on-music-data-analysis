@@ -26,8 +26,6 @@ def extract_rows_by_name(filename, name1, name2):
 
     return header, extracted_rows
 
-# Replace 'resultsWithALotOfFeatures.csv' with your actual filename
-# and 'name1', 'name2' with the specific names you want to find
 filename = 'resultsWithALotOfFeatures.csv'
 name1 = 'ΑΝΔΡΕΑΣ ΡΟ'
 name2 = 'ΔΕΡΜΙΤΖΟΓΙ'
