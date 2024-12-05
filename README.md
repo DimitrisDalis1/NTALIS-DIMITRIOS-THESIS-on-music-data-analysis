@@ -8,7 +8,7 @@ Since the mp3s are not uploaded (at this branch at least) you cannot use audio_a
 
 # Things that I have done #
 
-(DAPCA-audio_analysis.py)DAPCA which gives us some important features while also comparing different PCAs
+(DAPCA-audio_analysis.py)DAPCA which gives us some important features while also comparing different PCAs<br/>
 (get_wanted_artists)Creates a csv with only the two artists we want to choose from
 (MDS-audio_analysis.ipynb)Uses MDS with different distances
 (pyAudioAnalysisFeaturesExtraction)Needs a lot of tweaking and WAV files. Prolly the next step to this project
