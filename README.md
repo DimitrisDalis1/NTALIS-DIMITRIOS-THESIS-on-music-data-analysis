@@ -28,4 +28,5 @@ About the csvs<br/>
 Try that on the CNN:
 
 https://scikit-learn.org/1.5/modules/generated/sklearn.model_selection.cross_validate.html <br />
-KALOGRIDIS_KARAVITIS run DAPCA with dummy songs
+KALOGRIDIS_KARAVITIS run DAPCA with dummy songs<br />
+TSNE all songs using numbers instead of colors
