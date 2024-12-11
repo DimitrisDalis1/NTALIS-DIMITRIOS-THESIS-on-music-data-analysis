@@ -26,4 +26,5 @@ About the csvs<br/>
 (resultsWithALotOfFeatures.csv)Has about 100 diff songs<br/>
 
 Try that on the CNN:
+
 https://scikit-learn.org/1.5/modules/generated/sklearn.model_selection.cross_validate.html
