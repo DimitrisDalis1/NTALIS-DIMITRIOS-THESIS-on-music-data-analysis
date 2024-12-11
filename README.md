@@ -24,3 +24,6 @@ About the csvs<br/>
 (exctracted_data.csv)Output of get_wanted_artists.py<br/>
 (false_data_songs.csv)Output of create_false_songs.py<br/>
 (resultsWithALotOfFeatures.csv)Has about 100 diff songs<br/>
+
+Try that on the CNN:
+https://scikit-learn.org/1.5/modules/generated/sklearn.model_selection.cross_validate.html
