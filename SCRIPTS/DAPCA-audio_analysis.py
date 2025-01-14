@@ -30,54 +30,41 @@ def enumerate_strings(strings):
 
     return enumerated_strings
 
-# Load data
-data = pd.read_csv('results_features.csv')
+data = pd.read_csv('extracted_data.csv')
 
-numerical_data = data.iloc[:, :-1]
+# Separate numerical data: from the beginning to the 4th column before the end
+numerical_data = data.iloc[:, :-4]
 
-artist_category = data.iloc[:, -1]
+# Separate artist category: the 3rd column from the end
+artist_category = data.iloc[:, -3]
 
 
-numerical_data = np.array(numerical_data)  # Assuming X is your data
-artist_category = np.array(artist_category)  # Assuming artist_category is a list or array
+numerical_data = np.array(numerical_data)  
+artist_category = np.array(artist_category) 
 
 #Change this number to alter the amount of features and PCAs are shown/compared
-Pca_number = 3
+Pca_number = 4
 
 # Perform DAPCA
 V, D, PX, PY, kNNs = DAPCA(numerical_data, artist_category, nComp=Pca_number)
-'''
-# Calculate the cumulative explained variance ratio
-cumulative_variance_ratio = np.cumsum(D) / np.sum(D)
 
-# Choose a threshold (e.g., 95%)
-threshold = 0.9
-
-# Determine the number of components to keep
-num_components_to_keep = np.argmax(cumulative_variance_ratio >= threshold) + 1
-print(num_components_to_keep)
-'''
-# Select the top components
 V_reduced = V[:, :Pca_number]
 X_reduced = numerical_data[:, :Pca_number]
+
 
 # Get absolute loadings for selected components
 abs_loadings = np.abs(V_reduced)
 
-# Identify top features for each component (assuming 4 components)
+# Identify top features for each component
 top_features_per_component = []
 for i in range(Pca_number):
-    top_features_per_component.append(data.columns[:-1][abs_loadings[:, i].argsort()[-4:]])  # Get top 3 features
+    top_features_per_component.append(data.columns[:-1][abs_loadings[:, i].argsort()[-4:]])  # Get top 4 features
 
 # Print interpretation for each component
 for i in range(Pca_number):
     print(f"PC{i+1} - Top Features:", *top_features_per_component[i])
 
-#print(PX)
-'''
-#Match the number of nComp the one below
-X_reduced = PX[:, :6]
-'''
+
 # Create a LabelEncoder object
 label_encoder = LabelEncoder()
 
@@ -89,11 +76,20 @@ num_components = X_reduced.shape[1]
 
 
 for i in range(num_components):
-    for j in range(i+1, num_components):
-        plt.figure()  # Create a new figure for each plot
-        plt.scatter(X_reduced[:, i], X_reduced[:, j], c=artist_category_encoded)
+    for j in range(i + 1, num_components):
+        plt.figure(figsize=(10, 8))  # Increase figure size
+        scatter = plt.scatter(X_reduced[:, i], X_reduced[:, j], c=artist_category_encoded, cmap='rainbow') 
+
+        # Create a legend
+        unique_artists = label_encoder.classes_
+        handles = [plt.Line2D([], [], marker='o', color=scatter.cmap(scatter.norm(label_encoder.transform([artist]))[0])) 
+                   for artist in unique_artists]
+        plt.legend(handles, unique_artists, title="Artists", loc='upper left', bbox_to_anchor=(0.75, 1)) 
+
         plt.xlabel(f"PC{i+1}")
         plt.ylabel(f"PC{j+1}")
         plt.title(f"PC{i+1} vs PC{j+1}")
-        plt.colorbar()
+        # Remove the colorbar
+        plt.colorbar().remove() 
         plt.show()
+
