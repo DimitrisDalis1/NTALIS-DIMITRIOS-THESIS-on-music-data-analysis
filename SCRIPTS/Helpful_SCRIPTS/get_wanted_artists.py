@@ -1,41 +1,39 @@
 import csv
-import unidecode
 
-def extract_rows_by_name(filename, name1, name2):
-    """Extracts rows from a CSV file based on two specific names in the last column, including the artist's name.
+def extract_rows_by_names(filename, artist_names):
+    """Extracts rows from a CSV file based on a list of artist names in the "singer" column.
 
     Args:
         filename: The name of the CSV file.
-        name1: The first name to search for.
-        name2: The second name to search for.
+        artist_names: A list of artist names to search for.
 
     Returns:
-        A list of rows containing the extracted data, including the artist's name.
+        A list of rows containing the extracted data.
     """
 
     extracted_rows = []
     with open(filename, 'r', encoding='utf-8') as csvfile:
-        reader = csv.reader(csvfile)
-        header = next(reader)
+        reader = csv.DictReader(csvfile)
+        header = reader.fieldnames
 
         for row in reader:
-            last_column = row[-1]
-            if name1.lower() in last_column.lower() or name2.lower() in last_column.lower():
-                extracted_row = row
-                extracted_rows.append(extracted_row)
+            singer_name = row['singer'].lower()  # Convert singer name to lowercase for case-insensitive search
+            if any(artist_name.lower() in singer_name for artist_name in artist_names):
+                extracted_rows.append(row)
 
     return header, extracted_rows
 
-filename = 'resultsWithALotOfFeatures.csv'
-name1 = 'ΑΝΔΡΕΑΣ ΡΟ'
-name2 = 'ΔΕΡΜΙΤΖΟΓΙ'
+filename = 'false_data_songs.csv'
 
-header, extracted_rows = extract_rows_by_name(filename, name1, name2)
+
+artist_names = ['ΔΕΡΜΙΤΖΟΓΙΑΝΝΗΣ', 'ΘΑΝΑΣΗΣ ΣΚΟΡΔΑΛΟΣ']  # Add more names as needed
+
+header, extracted_rows = extract_rows_by_names(filename, artist_names)
 
 # Create a new CSV file to store the extracted data
 with open('extracted_data.csv', 'w', newline='', encoding='utf-8') as output_file:
-    writer = csv.writer(output_file)
-    writer.writerow(header)
+    writer = csv.DictWriter(output_file, fieldnames=header)
+    writer.writeheader()
     writer.writerows(extracted_rows)
 
 print("Extracted data saved to 'extracted_data.csv'")
